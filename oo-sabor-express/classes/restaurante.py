@@ -1,4 +1,8 @@
 from classes.avaliacao import Avaliacao
+from classes.cardapio.item_cardapio import ItemCardapio
+from classes.cardapio.bebida import Bebida
+
+
 
 class Restaurante:
 
@@ -10,6 +14,7 @@ class Restaurante:
         self._categoria = categoria
         self._ativo = ativo
         self._avaliacao = []
+        self._cardapio = []
         Restaurante.restaurantes.append(self)
     
     @classmethod
@@ -40,7 +45,26 @@ class Restaurante:
     def receber_avaliacao(cls, index, cliente, nota):
         avaliacao = Avaliacao(cliente, nota)
         cls.restaurantes[index]._avaliacao.append(avaliacao)
-    
+
+    @classmethod
+    def create_item_cardapio(cls, index, item):
+        if isinstance(item, ItemCardapio):
+            cls.restaurantes[index]._cardapio.append(item)
+
+    @classmethod
+    def list_cardapio(cls, index):
+        if cls.restaurantes[index]._cardapio: 
+            for i, item in enumerate(cls.restaurantes[index]._cardapio, start=1):
+                if isinstance(item, Bebida):
+                    linha = '*'
+                    numberLetras = len("Bebidas".ljust(40).rjust(40))
+                    print(f'{linha * numberLetras}')
+                    print("Bebidas".rjust(20))
+                    print(f'{linha * numberLetras}')
+                    mensagem = f"{i}. Nome: {item._nome} | Preço: R${item._preco} | Tamanho: {item._tamanho}"
+                    print(f'\n  {mensagem}')
+        else:
+            print("\n Nenhum bebida cadastrada \n")
     @classmethod
     def media_avaliacoes(cls, restaurante):
         if not restaurante._avaliacao:
